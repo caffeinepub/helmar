@@ -1,0 +1,169 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 5,
+  "summary": "Helmar: an internet-based social media/communication app with TikTok-like short video feed, accounts, profiles, social graph, engagement, chat, and notifications.",
+  "architectural_notes": [
+    "App is fully internet-based/online",
+    "Authentication is limited to Internet Identity; phone/SMS verification (e.g., Twilio/Firebase SMS) is not supported on this platform."
+  ],
+  "known_issues": [
+    "Previous build attempt failed (\"AI was unable to complete your request\")",
+    "Frontend files/folder not accessible or build incomplete, blocking UI changes such as login screen redesign."
+  ],
+  "isFixRequest": false,
+  "existing_features": [
+    {
+      "id": "feature-build-the-helmar-frontend-app-with-internet-identity-login-and-core-navigation-unauthenticated-landing-login-authenticated-main-feed-upload-profile-pages-messaging-and-notifications",
+      "title": "Build the Helmar frontend app with Internet Identity login and core navigation: unauthenticated landing/login, authenticated main feed, upload, profile pages, messaging, and notifications.",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-a-tiktok-like-vertical-short-video-feed-ui-paginated-feed-swipe-scroll-through-videos-play-pause-show-caption-author-and-engagement-controls-like-comment",
+      "title": "Implement a TikTok-like vertical short-video feed UI: paginated feed, swipe/scroll through videos, play/pause, show caption/author, and engagement controls (like/comment).",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-user-profile-features-view-own-profile-edit-own-profile-display-name-bio-avatar-view-other-users-profiles-and-follow-unfollow-from-profile-screens",
+      "title": "Add user profile features: view own profile, edit own profile (display name, bio, avatar), view other users' profiles, and follow/unfollow from profile screens.",
+      "reqIds": [
+        "REQ-5"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-video-posting-flow-select-a-video-file-add-caption-upload-with-progress-indication-publish-the-post-and-see-the-new-post-appear-in-the-user-s-profile-and-feed",
+      "title": "Add video posting flow: select a video file, add caption, upload with progress indication, publish the post, and see the new post appear in the user’s profile and feed.",
+      "reqIds": [
+        "REQ-6"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-messaging-non-realtime-inbox-list-of-conversations-thread-view-send-message-and-periodic-manual-refresh-for-new-messages",
+      "title": "Implement messaging (non-realtime): inbox list of conversations, thread view, send message, and periodic/manual refresh for new messages.",
+      "reqIds": [
+        "REQ-7"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-in-app-notifications-non-push-create-notifications-on-relevant-actions-new-follower-like-comment-message-and-provide-a-notifications-screen-with-unread-read-state",
+      "title": "Implement in-app notifications (non-push): create notifications on relevant actions (new follower, like, comment, message) and provide a notifications screen with unread/read state.",
+      "reqIds": [
+        "REQ-8"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-apply-a-coherent-distinctive-visual-theme-across-the-app-colors-typography-spacing-and-component-styling-suitable-for-a-modern-short-video-social-app-avoid-a-blue-purple-default-palette",
+      "title": "Apply a coherent, distinctive visual theme across the app (colors, typography, spacing, and component styling) suitable for a modern short-video social app; avoid a blue/purple default palette.",
+      "reqIds": [
+        "REQ-9"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-generated-brand-assets-as-static-files-and-use-them-in-the-ui-app-header-landing-and-favicon-app-icon",
+      "title": "Add generated brand assets as static files and use them in the UI (app header/landing and favicon/app icon).",
+      "reqIds": [
+        "REQ-10"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-only-the-primary-login-button-on-the-landing-login-page-the-button-in-frontend-src-pages-landingloginpage-tsx-to-better-match-a-modern-dark-login-screen-make-it-visually-prominent-with-a-premium-dark-mode-treatment-e-g-subtle-gradient-or-high-contrast-fill-stronger-shadow-glow-clear-hover-active-disabled-states-while-keeping-its-existing-behavior-calls-internet-identity-login-shows-connecting-during-login-remains-disabled-while-logging-in",
+      "title": "Update ONLY the primary login button on the Landing/Login page (the <Button> in frontend/src/pages/LandingLoginPage.tsx) to better match a modern dark login screen: make it visually prominent with a premium dark-mode treatment (e.g., subtle gradient or high-contrast fill, stronger shadow/glow, clear hover/active/disabled states), while keeping its existing behavior (calls Internet Identity login, shows 'Connecting...' during login, remains disabled while logging in).",
+      "reqIds": [
+        "REQ-11"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "User sign-up/login with Internet Identity (platform requirement)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-2",
+      "summary": "User profiles",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-3",
+      "summary": "Post/upload short videos",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-4",
+      "summary": "Main feed like TikTok (short video feed)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-5",
+      "summary": "Follow other users (social graph)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-6",
+      "summary": "Likes and comments on posts",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-7",
+      "summary": "Messaging/chat between users",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-8",
+      "summary": "Notifications",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-9",
+      "summary": "Create the Helmar backend canister (single Motoko actor) with persistent data models and public methods for: user registration (based on caller Principal via Internet Identity), user profiles, short-video posts, follows, likes, comments, direct messages, and notifications.",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-10",
+      "summary": "Implement short-video upload and playback APIs: allow authenticated users to upload a video for a post in chunks, store it in the canister, and stream/download it back for playback in the frontend.",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-11",
+      "summary": "Add phone-number (SMS) verification method for sign-in",
+      "reqIds": [],
+      "status": "blocked"
+    },
+    {
+      "id": "AR-12",
+      "summary": "Redesign login screen to a modern dark style with Helmar logo at the top; replace both app icon and wordmark on the login screen with the uploaded assets",
+      "reqIds": [],
+      "status": "pending"
+    }
+  ],
+  "projectName": "helmar",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}

@@ -1,0 +1,25 @@
+{
+  "kind": "feature_evidence_report",
+  "features": [
+    {
+      "featureId": "feature-update-only-the-primary-login-button-on-the-landing-login-page-the-button-in-frontend-src-pages-landingloginpage-tsx-to-better-match-a-modern-dark-login-screen-make-it-visually-prominent-with-a-premium-dark-mode-treatment-e-g-subtle-gradient-or-high-contrast-fill-stronger-shadow-glow-clear-hover-active-disabled-states-while-keeping-its-existing-behavior-calls-internet-identity-login-shows-connecting-during-login-remains-disabled-while-logging-in",
+      "featureTitle": "Update ONLY the primary login button on the Landing/Login page (the <Button> in frontend/src/pages/LandingLoginPage.tsx) to better match a modern dark login screen: make it visually prominent with a premium dark-mode treatment (e.g., subtle gradient or high-contrast fill, stronger shadow/glow, clear hover/active/disabled states), while keeping its existing behavior (calls Internet Identity login, shows 'Connecting...' during login, remains disabled while logging in).",
+      "files": [
+        "frontend/src/pages/LandingLoginPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-11"
+      ],
+      "confidence": "high"
+    }
+  ]
+}

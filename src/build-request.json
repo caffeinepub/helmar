@@ -1,0 +1,54 @@
+{
+  "kind": "build_request",
+  "title": "Redo login screen primary button styling (selected element only)",
+  "priority": "normal",
+  "requirements": [
+    {
+      "id": "REQ-11",
+      "text": "Update ONLY the primary login button on the Landing/Login page (the <Button> in frontend/src/pages/LandingLoginPage.tsx) to better match a modern dark login screen: make it visually prominent with a premium dark-mode treatment (e.g., subtle gradient or high-contrast fill, stronger shadow/glow, clear hover/active/disabled states), while keeping its existing behavior (calls Internet Identity login, shows 'Connecting...' during login, remains disabled while logging in).",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "Do it again"
+        ]
+      },
+      "acceptanceCriteria": [
+        "The only code change in LandingLoginPage is to the login button element (the Button currently rendered under the comment 'Login Button').",
+        "Button still triggers the existing login() handler on click and remains disabled when loginStatus === 'logging-in'.",
+        "Button label logic remains unchanged: shows 'Connecting...' while logging in and 'Get Started' otherwise.",
+        "Button has clearly improved dark-mode styling with visible hover/active feedback and a distinct disabled appearance.",
+        "No changes are made to logos, background image, tagline text, features grid, footer, routing, or authentication logic."
+      ]
+    }
+  ],
+  "constraints": [
+    "Apply changes ONLY to the selected element (the login button at XPath /html[1]/body[1]/div[1]/div[1]/div[2]/div[3]/button[1]).",
+    "Do not add phone/SMS/number verification for sign-in (Internet Identity remains the only authentication method).",
+    "Do not modify files under frontend/src/components/ui or other frontend immutablePaths.",
+    "Keep backend unchanged."
+  ],
+  "nonGoals": [
+    "Replacing the Helmar app icon or wordmark assets on the login screen.",
+    "Adding new sign-in methods besides Internet Identity.",
+    "Changing copy/text outside of the selected login button."
+  ],
+  "imageRequirements": {
+    "required": [],
+    "edits": []
+  },
+  "userProfileUpdate": {
+    "goalsToAdd": [],
+    "goalsToRemove": [],
+    "preferencesToAdd": [
+      "Modern dark login UI styling"
+    ],
+    "preferencesToRemove": [],
+    "miscToAdd": [],
+    "miscToRemove": [],
+    "fieldsToSet": {},
+    "fieldsToDelete": []
+  }
+}

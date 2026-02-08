@@ -1,0 +1,23 @@
+{
+  "frontend/src/App.tsx": "Main app component with TanStack Router setup, authentication gating, profile setup modal, and routes for feed, upload, profile, messages, and notifications.",
+  "frontend/src/pages/LandingLoginPage.tsx": "Unauthenticated landing page with Internet Identity login featuring a premium dark-mode styled button with gradient, glow effects, and smooth transitions, along with brand assets, tagline, and feature highlights.",
+  "frontend/src/components/layout/AppLayout.tsx": "Authenticated app layout with header (logo and logout), bottom navigation bar with unread notification badge, and main content area.",
+  "frontend/src/components/auth/ProfileSetupModal.tsx": "Modal dialog for first-time profile setup that prompts new users to enter a username before accessing the app.",
+  "frontend/src/components/common/ScreenStates.tsx": "Reusable loading, error, and empty state components for consistent UX across all screens.",
+  "frontend/src/pages/FeedPage.tsx": "TikTok-like vertical video feed with snap scrolling and full-height video viewer components.",
+  "frontend/src/components/feed/VideoPostViewer.tsx": "Full-height video post viewer with auto-play on scroll, play/pause controls, creator info overlay, and engagement bar, using correct import path for backend types.",
+  "frontend/src/components/feed/EngagementBar.tsx": "Vertical engagement controls for like and comment actions with counts, positioned on the right side of video posts, using correct import path for backend types.",
+  "frontend/src/components/comments/CommentsSheet.tsx": "Bottom sheet for viewing and adding comments on video posts with scrollable list and input form, using correct import path for backend types.",
+  "frontend/src/pages/UploadPage.tsx": "Video upload page with file picker, title/description inputs, upload progress indicator, and publish functionality.",
+  "frontend/src/pages/ProfilePage.tsx": "User profile page showing avatar, username, bio, follower count, post count, follow/edit buttons, and grid of user's video posts with hooks called unconditionally before any early returns.",
+  "frontend/src/components/profile/EditProfileDialog.tsx": "Dialog for editing user profile including username, bio, and avatar upload with image preview, using correct import path for backend types.",
+  "frontend/src/components/profile/FollowButton.tsx": "Follow/unfollow button component that shows current follow state and handles follow mutations.",
+  "frontend/src/components/profile/ProfilePostsList.tsx": "Grid layout of user's video posts with hover overlay showing play icon and post metadata, using correct import path for backend types.",
+  "frontend/src/pages/MessagesPage.tsx": "Messages inbox page (placeholder implementation showing empty state as backend messaging is not yet implemented).",
+  "frontend/src/pages/MessageThreadPage.tsx": "Message thread view for conversations with a specific user (placeholder implementation) with hooks called unconditionally before any early returns.",
+  "frontend/src/pages/NotificationsPage.tsx": "Notifications list page showing likes, comments, follows, and messages with unread indicators and mark-as-read functionality.",
+  "frontend/src/hooks/useQueries.ts": "React Query hooks for all backend operations including profiles, video posts, likes, comments, follows, and notifications with cache invalidation.",
+  "frontend/src/index.css": "Global styles with charcoal and warm coral/amber OKLCH color palette for light and dark modes, plus scrollbar hiding utilities.",
+  "frontend/index.html": "HTML entry point with favicon, meta tags, and app title for Helmar.",
+  "frontend/src/backend.d.ts": "TypeScript interface definitions for backend canister methods and data types (unchanged from template)."
+}

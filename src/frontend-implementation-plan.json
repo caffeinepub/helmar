@@ -1,0 +1,25 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "Redo Landing/Login primary button dark-mode styling",
+  "requirements": [
+    {
+      "id": "REQ-11",
+      "summary": "Restyle only the primary login <Button> on Landing/Login to a premium, prominent dark-mode treatment while preserving existing login behavior and label/disabled logic.",
+      "acceptanceCriteria": [
+        "The only code change in LandingLoginPage is to the login button element (the Button currently rendered under the comment 'Login Button').",
+        "Button still triggers the existing login() handler on click and remains disabled when loginStatus === 'logging-in'.",
+        "Button label logic remains unchanged: shows 'Connecting...' while logging in and 'Get Started' otherwise.",
+        "Button has clearly improved dark-mode styling with visible hover/active feedback and a distinct disabled appearance.",
+        "No changes are made to logos, background image, tagline text, features grid, footer, routing, or authentication logic."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/LandingLoginPage.tsx",
+          "operation": "modify",
+          "description": "Update ONLY the login button element under the 'Login Button' comment by adjusting the existing shadcn/ui <Button> props/className to add a modern premium dark-mode style (e.g., subtle dark gradient/high-contrast fill, stronger shadow or glow, focus ring, clear hover/active transitions, and distinct disabled styling) while keeping onClick={login}, disabled={isLoggingIn}, and the label expression exactly the same. Verify the component's usage instructions before implementing."
+        }
+      ]
+    }
+  ]
+}
