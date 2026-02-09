@@ -1,54 +1,80 @@
 {
   "kind": "build_request",
-  "title": "Redo login screen primary button styling (selected element only)",
+  "title": "Add user search button and user search screen",
   "priority": "normal",
   "requirements": [
     {
-      "id": "REQ-11",
-      "text": "Update ONLY the primary login button on the Landing/Login page (the <Button> in frontend/src/pages/LandingLoginPage.tsx) to better match a modern dark login screen: make it visually prominent with a premium dark-mode treatment (e.g., subtle gradient or high-contrast fill, stronger shadow/glow, clear hover/active/disabled states), while keeping its existing behavior (calls Internet Identity login, shows 'Connecting...' during login, remains disabled while logging in).",
+      "id": "REQ-31",
+      "text": "Add a user search entry point on the authenticated front/main screen by placing a clearly discoverable “Search” (magnifying glass) button in the app header on the Feed screen so users can start searching for other users from the main screen.",
       "target": "frontend",
       "source": {
         "messageIds": [
           "msg-1"
         ],
         "quotes": [
-          "Do it again"
+          "Add  search button on front screen for search users"
         ]
       },
       "acceptanceCriteria": [
-        "The only code change in LandingLoginPage is to the login button element (the Button currently rendered under the comment 'Login Button').",
-        "Button still triggers the existing login() handler on click and remains disabled when loginStatus === 'logging-in'.",
-        "Button label logic remains unchanged: shows 'Connecting...' while logging in and 'Get Started' otherwise.",
-        "Button has clearly improved dark-mode styling with visible hover/active feedback and a distinct disabled appearance.",
-        "No changes are made to logos, background image, tagline text, features grid, footer, routing, or authentication logic."
+        "When an authenticated user is on the Feed (path: '/'), a search icon/button is visible in the top header area.",
+        "Clicking/tapping the search button navigates to a dedicated user search screen (new route).",
+        "The existing logout button remains available and functional.",
+        "All user-facing text used for this feature is in English."
+      ]
+    },
+    {
+      "id": "REQ-32",
+      "text": "Implement a dedicated user search page that lets an authenticated user type a query and see matching user profiles, with each result navigable to that user’s profile page.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "Add  search button on front screen for search users"
+        ]
+      },
+      "acceptanceCriteria": [
+        "A new route exists for user search (for example, '/search'), registered in the TanStack Router route tree.",
+        "The search page includes: a text input (placeholder text in English), a search/clear affordance, and a results list.",
+        "Results show at minimum the user’s username; if a profile picture is available, it is displayed as an avatar thumbnail.",
+        "Tapping a result navigates to '/profile/$userId' for that user principal.",
+        "The page uses existing loading/error/empty state patterns (e.g., LoadingScreen/ErrorScreen/EmptyScreen) with English copy."
+      ]
+    },
+    {
+      "id": "REQ-33",
+      "text": "Add backend support for searching users by username and wire it into the frontend React Query layer so the user search page can retrieve results from the canister.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "Add  search button on front screen for search users"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Backend: Add a new query method in backend/main.mo that accepts a text query and returns matching users based on username (case-insensitive substring match).",
+        "Backend: The search method does not expose phone verification fields in any special way beyond what is already contained in the public UserProfile type; it returns only the data needed to render results (principal + profile, or equivalent).",
+        "Frontend: Add a new React Query hook in frontend/src/hooks/useQueries.ts to call the backend user search method and cache results by query string.",
+        "Frontend: The user search page uses the new hook to fetch and render results, and handles empty query and no-results states gracefully.",
+        "No changes are made to immutable frontend paths (frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useActor.ts, frontend/src/main.tsx, frontend/src/components/ui)."
       ]
     }
   ],
   "constraints": [
-    "Apply changes ONLY to the selected element (the login button at XPath /html[1]/body[1]/div[1]/div[1]/div[2]/div[3]/button[1]).",
-    "Do not add phone/SMS/number verification for sign-in (Internet Identity remains the only authentication method).",
-    "Do not modify files under frontend/src/components/ui or other frontend immutablePaths.",
-    "Keep backend unchanged."
+    "Backend must remain a single Motoko actor; add search logic to backend/main.mo.",
+    "Do not edit any files under frontend/src/components/ui or any other immutable paths listed in SYSTEM_CONTEXT.",
+    "Use English for any new user-facing text."
   ],
   "nonGoals": [
-    "Replacing the Helmar app icon or wordmark assets on the login screen.",
-    "Adding new sign-in methods besides Internet Identity.",
-    "Changing copy/text outside of the selected login button."
+    "Advanced search features (fuzzy matching, ranking, pagination, recent searches, or suggestions).",
+    "Searching video posts, captions, comments, or notifications (user search only).",
+    "Anonymous (logged-out) search access."
   ],
   "imageRequirements": {
     "required": [],
     "edits": []
-  },
-  "userProfileUpdate": {
-    "goalsToAdd": [],
-    "goalsToRemove": [],
-    "preferencesToAdd": [
-      "Modern dark login UI styling"
-    ],
-    "preferencesToRemove": [],
-    "miscToAdd": [],
-    "miscToRemove": [],
-    "fieldsToSet": {},
-    "fieldsToDelete": []
   }
 }

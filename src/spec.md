@@ -1,10 +1,11 @@
 # Specification
 
 ## Summary
-**Goal:** Redo the primary login button styling on the Landing/Login page to better match a modern, premium dark-mode UI without changing any login behavior.
+**Goal:** Let authenticated users search for other users from the main Feed screen and view results on a dedicated search page.
 
 **Planned changes:**
-- Update only the primary login `<Button>` under the “Login Button” comment in `frontend/src/pages/LandingLoginPage.tsx` with improved dark-mode styling (prominent fill such as subtle gradient/high-contrast, stronger shadow/glow).
-- Add clear visual states for hover/active/disabled while keeping existing click handler, label logic (“Connecting...” vs “Get Started”), and disabled-while-logging-in behavior unchanged.
+- Add a clearly discoverable search (magnifying glass) button in the Feed header that navigates to a new user search route while keeping the existing logout button functional.
+- Create a new authenticated user search screen/route (e.g., `/search`) with an English placeholder text input, clear/search affordance, and a results list that shows usernames (and avatar thumbnails when available) and links to `/profile/$userId`.
+- Add a backend query in `backend/main.mo` to search users by username (case-insensitive substring match) and wire it to a new React Query hook in `frontend/src/hooks/useQueries.ts`, including loading/error/empty states using existing patterns.
 
-**User-visible outcome:** The Landing/Login page’s primary “Get Started” button looks more premium and visually prominent in dark mode, with obvious hover/active feedback and a distinct disabled appearance, while logging in continues to work exactly as before.
+**User-visible outcome:** From the Feed, users can tap a search icon to open a search screen, type a username query, see matching users, and navigate to any result’s profile.

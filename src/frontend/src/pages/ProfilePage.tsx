@@ -1,14 +1,15 @@
 import { useParams, useNavigate } from '@tanstack/react-router';
 import { useInternetIdentity } from '../hooks/useInternetIdentity';
-import { useGetUserProfile, useGetAllVideoPosts, useGetFollowers } from '../hooks/useQueries';
+import { useGetUserProfile, useGetAllVideoPosts, useGetFollowers, useGetFollowing } from '../hooks/useQueries';
 import { LoadingScreen, ErrorScreen, EmptyScreen } from '../components/common/ScreenStates';
 import EditProfileDialog from '../components/profile/EditProfileDialog';
 import FollowButton from '../components/profile/FollowButton';
 import ProfilePostsList from '../components/profile/ProfilePostsList';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Settings, MessageCircle } from 'lucide-react';
+import { Settings, MessageCircle, CheckCircle2, Phone } from 'lucide-react';
 import { useState, useMemo } from 'react';
 import { Principal } from '@dfinity/principal';
 
@@ -37,6 +38,7 @@ export default function ProfilePage() {
   );
   const { data: allPosts } = useGetAllVideoPosts();
   const { data: followers } = useGetFollowers(userPrincipal || Principal.anonymous());
+  const { data: following } = useGetFollowing(userPrincipal || Principal.anonymous());
 
   // Now we can do conditional returns
   if (!userPrincipal) {
@@ -53,10 +55,33 @@ export default function ProfilePage() {
 
   const userPosts = allPosts?.filter(post => post.creator.toString() === profileUserId) || [];
   const followerCount = followers?.length || 0;
+  const followingCount = following?.length || 0;
 
   const username = profile.username;
   const userInitial = username.charAt(0).toUpperCase();
   const avatarUrl = profile.profilePicture?.getDirectURL();
+
+  const getPhoneStatusBadge = () => {
+    if (!isOwnProfile) return null;
+    
+    if (profile.isPhoneVerified && profile.phoneNumber) {
+      return (
+        <Badge variant="default" className="bg-success text-success-foreground">
+          <CheckCircle2 className="h-3 w-3 mr-1" />
+          Phone Verified
+        </Badge>
+      );
+    }
+    if (profile.phoneNumber && !profile.isPhoneVerified) {
+      return (
+        <Badge variant="secondary">
+          <Phone className="h-3 w-3 mr-1" />
+          Phone Pending
+        </Badge>
+      );
+    }
+    return null;
+  };
 
   return (
     <div className="container max-w-4xl py-6 px-4">
@@ -70,7 +95,10 @@ export default function ProfilePage() {
 
           <div className="flex-1 space-y-4">
             <div>
-              <h1 className="text-2xl font-bold">{username}</h1>
+              <div className="flex items-center space-x-2">
+                <h1 className="text-2xl font-bold">{username}</h1>
+                {getPhoneStatusBadge()}
+              </div>
               {profile.bio && <p className="text-muted-foreground mt-1">{profile.bio}</p>}
             </div>
 
@@ -82,6 +110,10 @@ export default function ProfilePage() {
               <div>
                 <span className="font-bold">{followerCount}</span>
                 <span className="text-muted-foreground ml-1">followers</span>
+              </div>
+              <div>
+                <span className="font-bold">{followingCount}</span>
+                <span className="text-muted-foreground ml-1">following</span>
               </div>
             </div>
 

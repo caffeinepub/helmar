@@ -7,6 +7,7 @@ import Time "mo:core/Time";
 import Principal "mo:core/Principal";
 import Order "mo:core/Order";
 import Int "mo:core/Int";
+
 import Runtime "mo:core/Runtime";
 import Storage "blob-storage/Storage";
 import MixinStorage "blob-storage/Mixin";
@@ -14,15 +15,19 @@ import MixinAuthorization "authorization/MixinAuthorization";
 import AccessControl "authorization/access-control";
 
 actor {
-  let accessControlState = AccessControl.initState();
-  include MixinAuthorization(accessControlState);
-  include MixinStorage();
+  // Persistent storage
+  var nextVideoId = 0;
+  var nextCommentId = 0;
+  var nextNotificationId = 0;
 
   // User Profile
   public type UserProfile = {
     username : Text;
     bio : Text;
     profilePicture : ?Storage.ExternalBlob;
+    phoneNumber : ?Text;
+    isPhoneVerified : Bool;
+    phoneVerificationCode : ?Text;
   };
 
   module UserProfile {
@@ -89,14 +94,14 @@ actor {
     following : Principal;
   };
 
-  // Persistent storage
-  var nextVideoId = 0;
-  var nextCommentId = 0;
-  var nextNotificationId = 0;
+  let accessControlState = AccessControl.initState();
+  include MixinAuthorization(accessControlState);
+  include MixinStorage();
 
   let userProfiles = Map.empty<Principal, UserProfile>();
   let videoPosts = Map.empty<Text, VideoPost>();
   let followers = Map.empty<Principal, [Principal]>();
+  let following = Map.empty<Principal, [Principal]>();
   let notifications = Map.empty<Principal, [Notification]>();
 
   // User Profile Management Functions
@@ -108,8 +113,8 @@ actor {
   };
 
   public query ({ caller }) func getUserProfile(user : Principal) : async ?UserProfile {
-    if (caller != user and not AccessControl.isAdmin(accessControlState, caller)) {
-      Runtime.trap("Unauthorized: Can only view your own profile");
+    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
+      Runtime.trap("Unauthorized: Only users can view profiles");
     };
     userProfiles.get(user);
   };
@@ -119,6 +124,70 @@ actor {
       Runtime.trap("Unauthorized: Only users can save profiles");
     };
     userProfiles.add(caller, profile);
+  };
+
+  // Backend support for phone verification
+  public shared ({ caller }) func startPhoneVerification(phoneNumber : Text) : async Text {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
+      Runtime.trap("Unauthorized: Only users can start phone verification");
+    };
+
+    switch (userProfiles.get(caller)) {
+      case (null) { Runtime.trap("User profile not found") };
+      case (?profile) {
+        if (profile.isPhoneVerified) {
+          Runtime.trap("Phone number already verified (2)");
+        };
+
+        let phoneVerificationCode = "usercode";
+        let updatedProfile = {
+          profile with
+          phoneNumber = ?phoneNumber;
+          phoneVerificationCode = ?phoneVerificationCode;
+        };
+        userProfiles.add(caller, updatedProfile);
+        phoneVerificationCode;
+      };
+    };
+  };
+
+  public shared ({ caller }) func confirmPhoneVerification(phoneNumber : Text, verificationCode : Text) : async Bool {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
+      Runtime.trap("Unauthorized: Only users can confirm phone verification");
+    };
+
+    switch (userProfiles.get(caller)) {
+      case (null) { Runtime.trap("User profile not found") };
+      case (?profile) {
+        switch (profile.phoneNumber) {
+          case (null) { Runtime.trap("Phone number not found in user profile") };
+          case (?existingPhone) {
+            if (profile.isPhoneVerified) {
+              Runtime.trap("Phone number already verified (1)");
+            };
+            if (phoneNumber != existingPhone) {
+              Runtime.trap("Invalid phone number");
+            };
+            let code = switch (profile.phoneVerificationCode) {
+              case (null) { Runtime.trap("Verification code not found") };
+              case (?c) { c };
+            };
+            if (verificationCode == code) {
+              let updatedProfile = {
+                profile with
+                isPhoneVerified = true;
+                phoneVerificationCode = null;
+                phoneNumber = ?phoneNumber;
+              };
+              userProfiles.add(caller, updatedProfile);
+              true;
+            } else {
+              Runtime.trap("Invalid verification code");
+            };
+          };
+        };
+      };
+    };
   };
 
   // Create Video Post
@@ -247,8 +316,16 @@ actor {
       Runtime.trap("Duplicate follow: You are already following this user");
     };
 
-    let updatedFollowers = currentFollowers.concat([caller]); // Corrected line
+    let updatedFollowers = currentFollowers.concat([caller]);
     followers.add(userToFollow, updatedFollowers);
+
+    // Update following list for the user initiating the follow
+    let currentFollowing = switch (following.get(caller)) {
+      case (null) { [] };
+      case (?existing) { existing };
+    };
+    let updatedFollowing = currentFollowing.concat([userToFollow]);
+    following.add(caller, updatedFollowing);
 
     // Notification for followed user
     let notification : Notification = {
@@ -267,6 +344,47 @@ actor {
     notifications.add(userToFollow, userNotifications);
 
     nextNotificationId += 1;
+  };
+
+  public shared ({ caller }) func unfollowUser(userToUnfollow : Principal) : async () {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
+      Runtime.trap("Unauthorized: Only users can unfollow others");
+    };
+
+    if (caller == userToUnfollow) {
+      Runtime.trap("You cannot unfollow yourself");
+    };
+
+    // Remove from followers list of the target user
+    switch (followers.get(userToUnfollow)) {
+      case (null) {
+        // If not following, do nothing
+        return;
+      };
+      case (?existingFollowers) {
+        let updatedFollowers = existingFollowers.filter(func(p) { p != caller });
+        followers.add(userToUnfollow, updatedFollowers);
+      };
+    };
+
+    // Remove from following list of the caller
+    switch (following.get(caller)) {
+      case (null) {
+        // If not following anyone, do nothing
+        return;
+      };
+      case (?existingFollowing) {
+        let updatedFollowing = existingFollowing.filter(func(p) { p != userToUnfollow });
+        following.add(caller, updatedFollowing);
+      };
+    };
+  };
+
+  public query ({ caller }) func getFollowing(user : Principal) : async [Principal] {
+    switch (following.get(user)) {
+      case (null) { [] };
+      case (?f) { f };
+    };
   };
 
   public shared ({ caller }) func updateNotificationStatus(notificationId : Text, isRead : Bool) : async () {
@@ -331,5 +449,17 @@ actor {
       case (null) { [] };
       case (?f) { f };
     };
+  };
+
+  public query ({ caller }) func searchUsers(searchText : Text) : async [UserProfile] {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
+      Runtime.trap("Unauthorized: Only users can search profiles");
+    };
+
+    userProfiles.values().toArray().filter(
+      func(profile) {
+        profile.username.contains(#text(searchText));
+      }
+    ).sort<UserProfile>();
   };
 };

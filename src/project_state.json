@@ -1,14 +1,17 @@
 {
   "schemaVersion": "1.0.0",
-  "projectStateVersion": 5,
+  "projectStateVersion": 19,
   "summary": "Helmar: an internet-based social media/communication app with TikTok-like short video feed, accounts, profiles, social graph, engagement, chat, and notifications.",
   "architectural_notes": [
     "App is fully internet-based/online",
-    "Authentication is limited to Internet Identity; phone/SMS verification (e.g., Twilio/Firebase SMS) is not supported on this platform."
+    "Authentication is limited to Internet Identity; phone/SMS verification (e.g., Twilio/Firebase SMS) is not supported on this platform.",
+    "Branding direction: app name should remain \"HELMAR\" (do not proceed with renaming to \"styk\" unless explicitly requested)."
   ],
   "known_issues": [
     "Previous build attempt failed (\"AI was unable to complete your request\")",
-    "Frontend files/folder not accessible or build incomplete, blocking UI changes such as login screen redesign."
+    "Frontend files/folder not accessible or build incomplete, blocking UI changes such as login screen redesign.",
+    "User reports the latest update is not live / changes not reflected after deployment (possible deployment/publish issue).",
+    "Live URL https://helmar.ic0.app returns “Canister ID Not Resolved” (canister behind custom domain appears missing/unreachable; redeploy likely required)."
   ],
   "isFixRequest": false,
   "existing_features": [
@@ -81,6 +84,134 @@
       "title": "Update ONLY the primary login button on the Landing/Login page (the <Button> in frontend/src/pages/LandingLoginPage.tsx) to better match a modern dark login screen: make it visually prominent with a premium dark-mode treatment (e.g., subtle gradient or high-contrast fill, stronger shadow/glow, clear hover/active/disabled states), while keeping its existing behavior (calls Internet Identity login, shows 'Connecting...' during login, remains disabled while logging in).",
       "reqIds": [
         "REQ-11"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-generate-new-brand-logo-assets-for-the-rebrand-to-styk-including-an-app-icon-and-a-wordmark-as-static-images-under-frontend-public-assets-generated",
+      "title": "Generate new brand logo assets for the rebrand to “styk”, including an app icon and a wordmark, as static images under frontend/public/assets/generated.",
+      "reqIds": [
+        "REQ-12"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-landing-login-page-to-use-the-new-styk-icon-and-wordmark-assets-instead-of-the-existing-helmar-assets-and-update-the-logo-alt-text-to-styk",
+      "title": "Update the Landing/Login page to use the new “styk” icon and wordmark assets instead of the existing Helmar assets, and update the logo alt text to “styk”.",
+      "reqIds": [
+        "REQ-13"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-in-app-header-branding-to-use-the-new-styk-wordmark-asset-instead-of-the-existing-helmar-wordmark-and-update-the-image-alt-text-to-styk",
+      "title": "Update the in-app header branding to use the new “styk” wordmark asset instead of the existing Helmar wordmark, and update the image alt text to “styk”.",
+      "reqIds": [
+        "REQ-14"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-rename-the-app-in-the-html-shell-to-styk-by-updating-the-document-title-meta-description-and-favicon-reference-to-use-the-new-styk-icon",
+      "title": "Rename the app in the HTML shell to “styk” by updating the document title, meta description, and favicon reference to use the new “styk” icon.",
+      "reqIds": [
+        "REQ-15"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-phone-number-verification-ui-for-the-authenticated-user-that-allows-entering-a-phone-number-requesting-a-verification-code-and-confirming-the-code-to-mark-the-number-as-verified",
+      "title": "Add a phone number verification UI for the authenticated user that allows entering a phone number, requesting a verification code, and confirming the code to mark the number as verified.",
+      "reqIds": [
+        "REQ-18"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-extend-the-frontend-react-query-layer-to-call-the-new-backend-phone-verification-methods-and-keep-cached-user-profile-data-in-sync-after-verification-succeeds",
+      "title": "Extend the frontend React Query layer to call the new backend phone verification methods and keep cached user profile data in sync after verification succeeds.",
+      "reqIds": [
+        "REQ-19"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-introduce-a-single-source-of-truth-for-the-application-name-a-frontend-branding-constant-and-use-it-to-replace-all-hard-coded-user-facing-occurrences-of-the-current-app-name-e-g-styk-across-the-frontend-including-the-html-shell-metadata-and-any-image-alt-text-so-the-name-can-be-changed-consistently-in-one-place",
+      "title": "Introduce a single source of truth for the application name (a frontend branding constant) and use it to replace all hard-coded user-facing occurrences of the current app name (e.g., \"styk\") across the frontend, including the HTML shell metadata and any image alt text, so the name can be changed consistently in one place.",
+      "reqIds": [
+        "REQ-20"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-html-shell-metadata-in-frontend-index-html-to-match-helmar-branding-by-setting-a-helmar-specific-document-title-and-meta-description-and-keep-the-favicon-pointed-at-the-helmar-icon-asset",
+      "title": "Update the HTML shell metadata in frontend/index.html to match Helmar branding by setting a Helmar-specific document title and meta description, and keep the favicon pointed at the Helmar icon asset.",
+      "reqIds": [
+        "REQ-22"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-single-source-frontend-build-identifier-e-g-build-id-or-app-build-in-frontend-src-config-branding-ts-and-render-it-in-the-ui-so-users-can-confirm-the-currently-deployed-version-is-the-latest",
+      "title": "Add a single-source frontend build identifier (e.g., BUILD_ID or APP_BUILD) in `frontend/src/config/branding.ts`, and render it in the UI so users can confirm the currently deployed version is the latest.",
+      "reqIds": [
+        "REQ-23"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-frontend-cache-busting-for-key-static-branding-assets-so-that-after-a-deployment-browsers-are-less-likely-to-keep-showing-older-icon-wordmark-background-images-from-cache",
+      "title": "Implement frontend cache-busting for key static branding assets so that after a deployment, browsers are less likely to keep showing older icon/wordmark/background images from cache.",
+      "reqIds": [
+        "REQ-24"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-extend-the-react-query-layer-to-support-unfollow-and-following-list-retrieval-in-frontend-src-hooks-usequeries-ts-add-hooks-for-useunfollowuser-and-usegetfollowing-user-principal-that-call-the-new-backend-methods-and-invalidate-relevant-cached-queries-followers-following-notifications-if-applicable",
+      "title": "Extend the React Query layer to support unfollow and following-list retrieval. In `frontend/src/hooks/useQueries.ts`, add hooks for `useUnfollowUser()` and `useGetFollowing(user: Principal)` that call the new backend methods and invalidate relevant cached queries (followers, following, notifications if applicable).",
+      "reqIds": [
+        "REQ-28"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-follow-button-ux-so-it-supports-toggling-between-follow-and-following-unfollow-update-frontend-src-components-profile-followbutton-tsx-to-1-call-follow-when-not-following-2-call-unfollow-when-currently-following-and-3-remain-responsive-with-clear-pending-disabled-behavior-during-mutation",
+      "title": "Update the follow button UX so it supports toggling between Follow and Following (Unfollow). Update `frontend/src/components/profile/FollowButton.tsx` to: (1) call follow when not following, (2) call unfollow when currently following, and (3) remain responsive with clear pending/disabled behavior during mutation.",
+      "reqIds": [
+        "REQ-29"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-show-both-follower-and-following-counts-on-profile-pages-update-frontend-src-pages-profilepage-tsx-to-display-a-following-count-alongside-existing-followers-using-the-new-usegetfollowing-hook",
+      "title": "Show both follower and following counts on profile pages. Update `frontend/src/pages/ProfilePage.tsx` to display a “following” count alongside existing “followers”, using the new `useGetFollowing` hook.",
+      "reqIds": [
+        "REQ-30"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-user-search-entry-point-on-the-authenticated-front-main-screen-by-placing-a-clearly-discoverable-search-magnifying-glass-button-in-the-app-header-on-the-feed-screen-so-users-can-start-searching-for-other-users-from-the-main-screen",
+      "title": "Add a user search entry point on the authenticated front/main screen by placing a clearly discoverable “Search” (magnifying glass) button in the app header on the Feed screen so users can start searching for other users from the main screen.",
+      "reqIds": [
+        "REQ-31"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-a-dedicated-user-search-page-that-lets-an-authenticated-user-type-a-query-and-see-matching-user-profiles-with-each-result-navigable-to-that-user-s-profile-page",
+      "title": "Implement a dedicated user search page that lets an authenticated user type a query and see matching user profiles, with each result navigable to that user’s profile page.",
+      "reqIds": [
+        "REQ-32"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-backend-support-for-searching-users-by-username-and-wire-it-into-the-frontend-react-query-layer-so-the-user-search-page-can-retrieve-results-from-the-canister",
+      "title": "Add backend support for searching users by username and wire it into the frontend React Query layer so the user search page can retrieve results from the canister.",
+      "reqIds": [
+        "REQ-33"
       ],
       "version": 1
     }
@@ -161,8 +292,69 @@
       "summary": "Redesign login screen to a modern dark style with Helmar logo at the top; replace both app icon and wordmark on the login screen with the uploaded assets",
       "reqIds": [],
       "status": "pending"
+    },
+    {
+      "id": "AR-13",
+      "summary": "Rebrand: change the app logo and rename the app to \"styk\"",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-14",
+      "summary": "Add backend support for storing a user phone number and its verification status on the user profile, and expose methods to start and confirm phone number verification for the authenticated caller.",
+      "reqIds": [
+        "REQ-16"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-15",
+      "summary": "Create a conditional Motoko state migration to preserve existing userProfiles data when the UserProfile type is extended for phone verification.",
+      "reqIds": [
+        "REQ-17"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-16",
+      "summary": "Set the application branding to “Helmar” as the single source of truth and ensure all user-facing occurrences of the app name use the branding constants (APP_NAME, APP_TAGLINE, APP_DESCRIPTION) rather than hard-coded strings (including any remaining “styk” references).",
+      "reqIds": [
+        "REQ-21"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-17",
+      "summary": "Update the backend profile visibility rules so users can view other users’ profiles (required for following). Specifically, adjust `getUserProfile(user : Principal)` in `backend/main.mo` so it no longer traps when the caller is not the same as `user` (while keeping any existing admin/user permission checks appropriate for read-only access).",
+      "reqIds": [
+        "REQ-25"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-18",
+      "summary": "Add unfollow support in the backend. Implement an `unfollowUser(userToUnfollow : Principal)` shared method in `backend/main.mo` that removes the caller from the target user’s follower list, is idempotent (does not trap if not currently following), and prevents self-unfollow edge cases consistently with follow rules.",
+      "reqIds": [
+        "REQ-26"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-19",
+      "summary": "Add backend support for retrieving who a user is following. Implement a query method `getFollowing(user : Principal) : async [Principal]` in `backend/main.mo` that returns the list of principals the given user is following.",
+      "reqIds": [
+        "REQ-27"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-20",
+      "summary": "Add a search button on the front/main screen to allow searching for users",
+      "reqIds": [],
+      "status": "pending"
     }
   ],
+  "gameProjectType": "none",
   "projectName": "helmar",
   "clarification_mode": "instant",
   "clarification_rounds": 0

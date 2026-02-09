@@ -1,23 +1,73 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Redo Landing/Login primary button dark-mode styling",
+  "title": "User search entry point and dedicated search screen",
   "requirements": [
     {
-      "id": "REQ-11",
-      "summary": "Restyle only the primary login <Button> on Landing/Login to a premium, prominent dark-mode treatment while preserving existing login behavior and label/disabled logic.",
+      "id": "REQ-31",
+      "summary": "Add a discoverable search (magnifying glass) button in the Feed header that navigates authenticated users to the user search screen while keeping logout available.",
       "acceptanceCriteria": [
-        "The only code change in LandingLoginPage is to the login button element (the Button currently rendered under the comment 'Login Button').",
-        "Button still triggers the existing login() handler on click and remains disabled when loginStatus === 'logging-in'.",
-        "Button label logic remains unchanged: shows 'Connecting...' while logging in and 'Get Started' otherwise.",
-        "Button has clearly improved dark-mode styling with visible hover/active feedback and a distinct disabled appearance.",
-        "No changes are made to logos, background image, tagline text, features grid, footer, routing, or authentication logic."
+        "When an authenticated user is on the Feed (path: '/'), a search icon/button is visible in the top header area.",
+        "Clicking/tapping the search button navigates to a dedicated user search screen (new route).",
+        "The existing logout button remains available and functional.",
+        "All user-facing text used for this feature is in English."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/pages/LandingLoginPage.tsx",
+          "path": "frontend/src/components/layout/AppLayout.tsx",
           "operation": "modify",
-          "description": "Update ONLY the login button element under the 'Login Button' comment by adjusting the existing shadcn/ui <Button> props/className to add a modern premium dark-mode style (e.g., subtle dark gradient/high-contrast fill, stronger shadow or glow, focus ring, clear hover/active transitions, and distinct disabled styling) while keeping onClick={login}, disabled={isLoggingIn}, and the label expression exactly the same. Verify the component's usage instructions before implementing."
+          "description": "Add a header action for Feed-only user search: render a magnifying-glass icon button when the current route is '/', and navigate to '/search' on click while preserving the existing logout button. Use existing shadcn-ui Button styling to match current header controls. Verify the component's usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-32",
+      "summary": "Create a dedicated authenticated user search page with query input, clear/search affordances, and navigable results that link to user profiles.",
+      "acceptanceCriteria": [
+        "A new route exists for user search (for example, '/search'), registered in the TanStack Router route tree.",
+        "The search page includes: a text input (placeholder text in English), a search/clear affordance, and a results list.",
+        "Results show at minimum the user’s username; if a profile picture is available, it is displayed as an avatar thumbnail.",
+        "Tapping a result navigates to '/profile/$userId' for that user principal.",
+        "The page uses existing loading/error/empty state patterns (e.g., LoadingScreen/ErrorScreen/EmptyScreen) with English copy."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/UserSearchPage.tsx",
+          "operation": "create",
+          "description": "Implement the user search UI: controlled text input with English placeholder, clear action, and a results list that shows username and optional avatar thumbnail (via ExternalBlob direct URL if available). Use existing ScreenStates (LoadingScreen/ErrorScreen/EmptyScreen) for loading/error/empty/no-results states, and navigate to '/profile/$userId' when a result is selected. Use existing shadcn-ui Input/Button/Avatar/Card (or equivalent) for consistent UI. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Register a new TanStack Router route for '/search' and wire it into the existing route tree so it renders the new UserSearchPage within the authenticated AppLayout."
+        }
+      ]
+    },
+    {
+      "id": "REQ-33",
+      "summary": "Wire frontend React Query support for backend user search and integrate it into the new user search page with caching by query string and graceful empty-query handling.",
+      "acceptanceCriteria": [
+        "Backend: Add a new query method in backend/main.mo that accepts a text query and returns matching users based on username (case-insensitive substring match).",
+        "Backend: The search method does not expose phone verification fields in any special way beyond what is already contained in the public UserProfile type; it returns only the data needed to render results (principal + profile, or equivalent).",
+        "Frontend: Add a new React Query hook in frontend/src/hooks/useQueries.ts to call the backend user search method and cache results by query string.",
+        "Frontend: The user search page uses the new hook to fetch and render results, and handles empty query and no-results states gracefully.",
+        "No changes are made to immutable frontend paths (frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useActor.ts, frontend/src/main.tsx, frontend/src/components/ui)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/hooks/useQueries.ts",
+          "operation": "modify",
+          "description": "Add a new React Query hook (e.g., useSearchUsers) that calls the backend user search capability and caches results by normalized query string (queryKey includes the search text). Ensure the query is disabled for empty/whitespace-only input and exposes loading/error states for the page to consume."
+        },
+        {
+          "path": "frontend/src/pages/UserSearchPage.tsx",
+          "operation": "modify",
+          "description": "Use the new search query hook to fetch/render results as the user types (or on explicit search action), handle empty-query state (show a helpful EmptyScreen message in English), and handle no-results state (English copy). Ensure selecting a result navigates to '/profile/$userId' using the principal from each result."
+        },
+        {
+          "path": "frontend/src/backend.d.ts",
+          "operation": "modify",
+          "description": "Update frontend backend type definitions as needed to reflect the searchUsers return shape required by the UI (must include the user's principal plus profile data, or equivalent), so the search results can navigate to '/profile/$userId' and display username/avatar."
         }
       ]
     }

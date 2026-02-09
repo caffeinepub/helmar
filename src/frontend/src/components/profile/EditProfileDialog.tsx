@@ -8,7 +8,9 @@ import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Separator } from '@/components/ui/separator';
 import { AlertCircle, Upload } from 'lucide-react';
+import PhoneVerificationSection from './PhoneVerificationSection';
 
 interface EditProfileDialogProps {
   open: boolean;
@@ -75,6 +77,9 @@ export default function EditProfileDialog({ open, onOpenChange, currentProfile }
         username: username.trim(),
         bio: bio.trim(),
         profilePicture,
+        phoneNumber: currentProfile.phoneNumber,
+        isPhoneVerified: currentProfile.isPhoneVerified,
+        phoneVerificationCode: currentProfile.phoneVerificationCode,
       });
 
       onOpenChange(false);
@@ -87,7 +92,7 @@ export default function EditProfileDialog({ open, onOpenChange, currentProfile }
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-md max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Edit Profile</DialogTitle>
         </DialogHeader>
@@ -142,6 +147,14 @@ export default function EditProfileDialog({ open, onOpenChange, currentProfile }
               placeholder="Tell us about yourself"
             />
           </div>
+
+          <Separator />
+
+          {/* Phone Verification Section */}
+          <PhoneVerificationSection
+            phoneNumber={currentProfile.phoneNumber}
+            isPhoneVerified={currentProfile.isPhoneVerified}
+          />
 
           {error && (
             <Alert variant="destructive">

@@ -2,6 +2,8 @@ import { useInternetIdentity } from '../hooks/useInternetIdentity';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { AlertCircle } from 'lucide-react';
+import { APP_NAME, APP_TAGLINE, BUILD_ID } from '../config/branding';
+import { withAssetVersion } from '../utils/assetVersion';
 
 export default function LandingLoginPage() {
   const { login, loginStatus, loginError } = useInternetIdentity();
@@ -14,7 +16,7 @@ export default function LandingLoginPage() {
       <div 
         className="absolute inset-0 opacity-10"
         style={{
-          backgroundImage: 'url(/assets/generated/helmar-bg.dim_1920x1080.png)',
+          backgroundImage: `url(${withAssetVersion('/assets/generated/helmar-bg.dim_1920x1080.png')})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
         }}
@@ -24,20 +26,20 @@ export default function LandingLoginPage() {
         {/* Logo */}
         <div className="flex flex-col items-center space-y-4">
           <img 
-            src="/assets/generated/helmar-icon.dim_1024x1024.png" 
-            alt="Helmar" 
+            src={withAssetVersion('/assets/generated/helmar-icon.dim_1024x1024.png')}
+            alt={APP_NAME} 
             className="w-24 h-24 rounded-3xl shadow-2xl"
           />
           <img 
-            src="/assets/generated/helmar-wordmark.dim_1200x300.png" 
-            alt="Helmar" 
+            src={withAssetVersion('/assets/generated/helmar-wordmark.dim_1200x300.png')}
+            alt={APP_NAME} 
             className="h-12 w-auto"
           />
         </div>
 
         {/* Tagline */}
         <div className="text-center space-y-2">
-          <h1 className="text-3xl font-bold tracking-tight">Share Your Moments</h1>
+          <h1 className="text-3xl font-bold tracking-tight">{APP_TAGLINE}</h1>
           <p className="text-muted-foreground text-lg">
             Create, discover, and connect through short videos
           </p>
@@ -80,11 +82,16 @@ export default function LandingLoginPage() {
       </div>
 
       {/* Footer */}
-      <footer className="absolute bottom-4 text-center text-sm text-muted-foreground">
-        © 2026. Built with ❤️ using{' '}
-        <a href="https://caffeine.ai" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground">
-          caffeine.ai
-        </a>
+      <footer className="absolute bottom-4 text-center text-sm text-muted-foreground space-y-1">
+        <div>
+          © 2026. Built with ❤️ using{' '}
+          <a href="https://caffeine.ai" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground">
+            caffeine.ai
+          </a>
+        </div>
+        <div className="text-xs">
+          Build: <span className="font-mono">{BUILD_ID}</span>
+        </div>
       </footer>
     </div>
   );

@@ -8,6 +8,7 @@ import ProfilePage from './pages/ProfilePage';
 import MessagesPage from './pages/MessagesPage';
 import MessageThreadPage from './pages/MessageThreadPage';
 import NotificationsPage from './pages/NotificationsPage';
+import UserSearchPage from './pages/UserSearchPage';
 import AppLayout from './components/layout/AppLayout';
 import ProfileSetupModal from './components/auth/ProfileSetupModal';
 import { LoadingScreen } from './components/common/ScreenStates';
@@ -66,6 +67,12 @@ const notificationsRoute = createRoute({
   component: NotificationsPage,
 });
 
+const searchRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/search',
+  component: UserSearchPage,
+});
+
 const routeTree = rootRoute.addChildren([
   indexRoute,
   uploadRoute,
@@ -74,6 +81,7 @@ const routeTree = rootRoute.addChildren([
   messagesRoute,
   messageThreadRoute,
   notificationsRoute,
+  searchRoute,
 ]);
 
 const router = createRouter({ routeTree });

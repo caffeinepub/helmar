@@ -33,6 +33,9 @@ export type Time = bigint;
 export interface UserProfile {
   'bio' : string,
   'username' : string,
+  'phoneVerificationCode' : [] | [string],
+  'isPhoneVerified' : boolean,
+  'phoneNumber' : [] | [string],
   'profilePicture' : [] | [ExternalBlob],
 }
 export type UserRole = { 'admin' : null } |
@@ -78,18 +81,23 @@ export interface _SERVICE {
   '_initializeAccessControlWithSecret' : ActorMethod<[string], undefined>,
   'addComment' : ActorMethod<[string, string], string>,
   'assignCallerUserRole' : ActorMethod<[Principal, UserRole], undefined>,
+  'confirmPhoneVerification' : ActorMethod<[string, string], boolean>,
   'createVideoPost' : ActorMethod<[string, string, ExternalBlob], string>,
   'followUser' : ActorMethod<[Principal], undefined>,
   'getAllVideoPosts' : ActorMethod<[], Array<VideoPost>>,
   'getCallerUserProfile' : ActorMethod<[], [] | [UserProfile]>,
   'getCallerUserRole' : ActorMethod<[], UserRole>,
   'getFollowers' : ActorMethod<[Principal], Array<Principal>>,
+  'getFollowing' : ActorMethod<[Principal], Array<Principal>>,
   'getNotifications' : ActorMethod<[], Array<Notification>>,
   'getUserProfile' : ActorMethod<[Principal], [] | [UserProfile]>,
   'getVideoPost' : ActorMethod<[string], [] | [VideoPost]>,
   'isCallerAdmin' : ActorMethod<[], boolean>,
   'likeVideo' : ActorMethod<[string], undefined>,
   'saveCallerUserProfile' : ActorMethod<[UserProfile], undefined>,
+  'searchUsers' : ActorMethod<[string], Array<UserProfile>>,
+  'startPhoneVerification' : ActorMethod<[string], string>,
+  'unfollowUser' : ActorMethod<[Principal], undefined>,
   'updateNotificationStatus' : ActorMethod<[string, boolean], undefined>,
 }
 export declare const idlService: IDL.ServiceClass;

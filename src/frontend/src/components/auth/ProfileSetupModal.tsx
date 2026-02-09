@@ -6,6 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { AlertCircle } from 'lucide-react';
+import { APP_NAME } from '../../config/branding';
 
 export default function ProfileSetupModal() {
   const [username, setUsername] = useState('');
@@ -31,6 +32,9 @@ export default function ProfileSetupModal() {
         username: username.trim(),
         bio: '',
         profilePicture: undefined,
+        phoneNumber: undefined,
+        isPhoneVerified: false,
+        phoneVerificationCode: undefined,
       });
     } catch (err: any) {
       setError(err.message || 'Failed to create profile');
@@ -41,7 +45,7 @@ export default function ProfileSetupModal() {
     <Dialog open={true}>
       <DialogContent className="sm:max-w-md" onInteractOutside={(e) => e.preventDefault()}>
         <DialogHeader>
-          <DialogTitle>Welcome to Helmar!</DialogTitle>
+          <DialogTitle>Welcome to {APP_NAME}!</DialogTitle>
           <DialogDescription>
             Let's set up your profile to get started
           </DialogDescription>

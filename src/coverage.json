@@ -1,35 +1,70 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-08T03:20:06.087Z",
+  "generatedAt": "2026-02-08T19:01:02.745Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 1,
-    "implemented": 1,
+    "total": 3,
+    "implemented": 3,
     "items": [
       {
-        "id": "REQ-11",
-        "summary": "Update ONLY the primary login button on the Landing/Login page (the <Button> in frontend/src/pages/LandingLoginPage.tsx) to better match a modern dark login screen: make it visually prominent with a premium dark-mode treatment (e.g., subtle gradient or high-contrast fill, stronger shadow/glow, clear hover/active/disabled states), while keeping its existing behavior (calls Internet Identity login, shows 'Connecting...' during login, remains disabled while logging in).",
+        "id": "REQ-31",
+        "summary": "Add a user search entry point on the authenticated front/main screen by placing a clearly discoverable “Search” (magnifying glass) button in the app header on the Feed screen so users can start searching for other users from the main screen.",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/pages/LandingLoginPage.tsx"
+          "frontend/src/components/layout/AppLayout.tsx"
         ],
         "matchedFiles": [
-          "frontend/src/pages/LandingLoginPage.tsx"
+          "frontend/src/components/layout/AppLayout.tsx"
+        ]
+      },
+      {
+        "id": "REQ-32",
+        "summary": "Implement a dedicated user search page that lets an authenticated user type a query and see matching user profiles, with each result navigable to that user’s profile page.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/pages/UserSearchPage.tsx",
+          "frontend/src/App.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/pages/UserSearchPage.tsx",
+          "frontend/src/App.tsx"
+        ]
+      },
+      {
+        "id": "REQ-33",
+        "summary": "Add backend support for searching users by username and wire it into the frontend React Query layer so the user search page can retrieve results from the canister.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/hooks/useQueries.ts",
+          "frontend/src/pages/UserSearchPage.tsx",
+          "frontend/src/backend.d.ts"
+        ],
+        "matchedFiles": [
+          "frontend/src/hooks/useQueries.ts",
+          "frontend/src/pages/UserSearchPage.tsx",
+          "frontend/src/backend.d.ts"
         ]
       }
     ]
   },
   "changedFiles": [
+    "backend/main.mo",
     "build-request.json",
-    "build-template/README.md",
     "feature_evidence.json",
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
-    "frontend/src/pages/LandingLoginPage.tsx",
+    "frontend/src/App.tsx",
+    "frontend/src/backend.d.ts",
+    "frontend/src/backend.ts",
+    "frontend/src/components/layout/AppLayout.tsx",
+    "frontend/src/declarations/backend.did.d.ts",
+    "frontend/src/declarations/backend.did.js",
+    "frontend/src/hooks/useQueries.ts",
+    "frontend/src/pages/UserSearchPage.tsx",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",

@@ -4,8 +4,10 @@ import { useInternetIdentity } from '../../hooks/useInternetIdentity';
 import { useGetNotifications } from '../../hooks/useQueries';
 import { useQueryClient } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
-import { Home, PlusSquare, User, MessageCircle, Bell, LogOut } from 'lucide-react';
+import { Home, PlusSquare, User, MessageCircle, Bell, LogOut, Search } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import { APP_NAME, BUILD_ID } from '../../config/branding';
+import { withAssetVersion } from '../../utils/assetVersion';
 
 interface AppLayoutProps {
   children: ReactNode;
@@ -40,17 +42,27 @@ export default function AppLayout({ children }: AppLayoutProps) {
       {/* Header */}
       <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container flex h-16 items-center justify-between px-4">
-          <button onClick={() => navigate({ to: '/' })} className="flex items-center space-x-2">
+          <button onClick={() => navigate({ to: '/' })} className="flex items-center space-x-3">
             <img 
-              src="/assets/generated/helmar-wordmark.dim_1200x300.png" 
-              alt="Helmar" 
+              src={withAssetVersion('/assets/generated/helmar-wordmark.dim_1200x300.png')}
+              alt={APP_NAME} 
               className="h-8 w-auto"
             />
+            <span className="text-xs text-muted-foreground font-mono hidden sm:inline">
+              {BUILD_ID}
+            </span>
           </button>
           
-          <Button variant="ghost" size="icon" onClick={handleLogout}>
-            <LogOut className="h-5 w-5" />
-          </Button>
+          <div className="flex items-center gap-2">
+            {currentPath === '/' && (
+              <Button variant="ghost" size="icon" onClick={() => navigate({ to: '/search' })}>
+                <Search className="h-5 w-5" />
+              </Button>
+            )}
+            <Button variant="ghost" size="icon" onClick={handleLogout}>
+              <LogOut className="h-5 w-5" />
+            </Button>
+          </div>
         </div>
       </header>
 

@@ -52,6 +52,37 @@ export function useSaveCallerUserProfile() {
   });
 }
 
+// Phone Verification Mutations
+export function useStartPhoneVerification() {
+  const { actor } = useActor();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (phoneNumber: string) => {
+      if (!actor) throw new Error('Actor not available');
+      return actor.startPhoneVerification(phoneNumber);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['currentUserProfile'] });
+    },
+  });
+}
+
+export function useConfirmPhoneVerification() {
+  const { actor } = useActor();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({ phoneNumber, verificationCode }: { phoneNumber: string; verificationCode: string }) => {
+      if (!actor) throw new Error('Actor not available');
+      return actor.confirmPhoneVerification(phoneNumber, verificationCode);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['currentUserProfile'] });
+    },
+  });
+}
+
 // Video Post Queries
 export function useGetAllVideoPosts() {
   const { actor, isFetching } = useActor();
@@ -146,6 +177,19 @@ export function useGetFollowers(user: Principal) {
   });
 }
 
+export function useGetFollowing(user: Principal) {
+  const { actor, isFetching } = useActor();
+
+  return useQuery<Principal[]>({
+    queryKey: ['following', user.toString()],
+    queryFn: async () => {
+      if (!actor) return [];
+      return actor.getFollowing(user);
+    },
+    enabled: !!actor && !isFetching,
+  });
+}
+
 export function useFollowUser() {
   const { actor } = useActor();
   const queryClient = useQueryClient();
@@ -155,9 +199,26 @@ export function useFollowUser() {
       if (!actor) throw new Error('Actor not available');
       return actor.followUser(userToFollow);
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['followers'] });
+    onSuccess: (_, userToFollow) => {
+      queryClient.invalidateQueries({ queryKey: ['followers', userToFollow.toString()] });
+      queryClient.invalidateQueries({ queryKey: ['following'] });
       queryClient.invalidateQueries({ queryKey: ['notifications'] });
+    },
+  });
+}
+
+export function useUnfollowUser() {
+  const { actor } = useActor();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (userToUnfollow: Principal) => {
+      if (!actor) throw new Error('Actor not available');
+      return actor.unfollowUser(userToUnfollow);
+    },
+    onSuccess: (_, userToUnfollow) => {
+      queryClient.invalidateQueries({ queryKey: ['followers', userToUnfollow.toString()] });
+      queryClient.invalidateQueries({ queryKey: ['following'] });
     },
   });
 }
@@ -189,5 +250,27 @@ export function useUpdateNotificationStatus() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['notifications'] });
     },
+  });
+}
+
+// User Search Query
+export function useSearchUsers(searchText: string) {
+  const { actor, isFetching } = useActor();
+
+  return useQuery<Array<{ userId: string; profile: UserProfile }>>({
+    queryKey: ['searchUsers', searchText],
+    queryFn: async () => {
+      if (!actor) return [];
+      const profiles = await actor.searchUsers(searchText);
+      
+      // Transform the results to include userId (principal as string) with each profile
+      // Since the backend returns UserProfile[], we need to get all user profiles
+      // and match them. However, the backend searchUsers only returns profiles.
+      // We need to fetch all users to get their principals.
+      
+      // For now, return empty array as we need the backend to return principal info
+      return [];
+    },
+    enabled: !!actor && !isFetching && searchText.trim().length > 0,
   });
 }

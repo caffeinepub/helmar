@@ -45,6 +45,9 @@ export const VideoPost = IDL.Record({
 export const UserProfile = IDL.Record({
   'bio' : IDL.Text,
   'username' : IDL.Text,
+  'phoneVerificationCode' : IDL.Opt(IDL.Text),
+  'isPhoneVerified' : IDL.Bool,
+  'phoneNumber' : IDL.Opt(IDL.Text),
   'profilePicture' : IDL.Opt(ExternalBlob),
 });
 export const NotificationType = IDL.Variant({
@@ -92,6 +95,7 @@ export const idlService = IDL.Service({
   '_initializeAccessControlWithSecret' : IDL.Func([IDL.Text], [], []),
   'addComment' : IDL.Func([IDL.Text, IDL.Text], [IDL.Text], []),
   'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
+  'confirmPhoneVerification' : IDL.Func([IDL.Text, IDL.Text], [IDL.Bool], []),
   'createVideoPost' : IDL.Func(
       [IDL.Text, IDL.Text, ExternalBlob],
       [IDL.Text],
@@ -106,6 +110,11 @@ export const idlService = IDL.Service({
       [IDL.Vec(IDL.Principal)],
       ['query'],
     ),
+  'getFollowing' : IDL.Func(
+      [IDL.Principal],
+      [IDL.Vec(IDL.Principal)],
+      ['query'],
+    ),
   'getNotifications' : IDL.Func([], [IDL.Vec(Notification)], ['query']),
   'getUserProfile' : IDL.Func(
       [IDL.Principal],
@@ -116,6 +125,9 @@ export const idlService = IDL.Service({
   'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
   'likeVideo' : IDL.Func([IDL.Text], [], []),
   'saveCallerUserProfile' : IDL.Func([UserProfile], [], []),
+  'searchUsers' : IDL.Func([IDL.Text], [IDL.Vec(UserProfile)], ['query']),
+  'startPhoneVerification' : IDL.Func([IDL.Text], [IDL.Text], []),
+  'unfollowUser' : IDL.Func([IDL.Principal], [], []),
   'updateNotificationStatus' : IDL.Func([IDL.Text, IDL.Bool], [], []),
 });
 
@@ -159,6 +171,9 @@ export const idlFactory = ({ IDL }) => {
   const UserProfile = IDL.Record({
     'bio' : IDL.Text,
     'username' : IDL.Text,
+    'phoneVerificationCode' : IDL.Opt(IDL.Text),
+    'isPhoneVerified' : IDL.Bool,
+    'phoneNumber' : IDL.Opt(IDL.Text),
     'profilePicture' : IDL.Opt(ExternalBlob),
   });
   const NotificationType = IDL.Variant({
@@ -206,6 +221,7 @@ export const idlFactory = ({ IDL }) => {
     '_initializeAccessControlWithSecret' : IDL.Func([IDL.Text], [], []),
     'addComment' : IDL.Func([IDL.Text, IDL.Text], [IDL.Text], []),
     'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
+    'confirmPhoneVerification' : IDL.Func([IDL.Text, IDL.Text], [IDL.Bool], []),
     'createVideoPost' : IDL.Func(
         [IDL.Text, IDL.Text, ExternalBlob],
         [IDL.Text],
@@ -220,6 +236,11 @@ export const idlFactory = ({ IDL }) => {
         [IDL.Vec(IDL.Principal)],
         ['query'],
       ),
+    'getFollowing' : IDL.Func(
+        [IDL.Principal],
+        [IDL.Vec(IDL.Principal)],
+        ['query'],
+      ),
     'getNotifications' : IDL.Func([], [IDL.Vec(Notification)], ['query']),
     'getUserProfile' : IDL.Func(
         [IDL.Principal],
@@ -230,6 +251,9 @@ export const idlFactory = ({ IDL }) => {
     'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
     'likeVideo' : IDL.Func([IDL.Text], [], []),
     'saveCallerUserProfile' : IDL.Func([UserProfile], [], []),
+    'searchUsers' : IDL.Func([IDL.Text], [IDL.Vec(UserProfile)], ['query']),
+    'startPhoneVerification' : IDL.Func([IDL.Text], [IDL.Text], []),
+    'unfollowUser' : IDL.Func([IDL.Principal], [], []),
     'updateNotificationStatus' : IDL.Func([IDL.Text, IDL.Bool], [], []),
   });
 };

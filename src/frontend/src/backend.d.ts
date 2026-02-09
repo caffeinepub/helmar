@@ -42,7 +42,14 @@ export interface VideoPost {
 export interface UserProfile {
     bio: string;
     username: string;
+    phoneVerificationCode?: string;
+    isPhoneVerified: boolean;
+    phoneNumber?: string;
     profilePicture?: ExternalBlob;
+}
+export interface UserSearchResult {
+    userId: Principal;
+    profile: UserProfile;
 }
 export enum NotificationType {
     like = "like",
@@ -58,17 +65,22 @@ export enum UserRole {
 export interface backendInterface {
     addComment(videoId: string, commentText: string): Promise<string>;
     assignCallerUserRole(user: Principal, role: UserRole): Promise<void>;
+    confirmPhoneVerification(phoneNumber: string, verificationCode: string): Promise<boolean>;
     createVideoPost(title: string, description: string, videoBlob: ExternalBlob): Promise<string>;
     followUser(userToFollow: Principal): Promise<void>;
     getAllVideoPosts(): Promise<Array<VideoPost>>;
     getCallerUserProfile(): Promise<UserProfile | null>;
     getCallerUserRole(): Promise<UserRole>;
     getFollowers(user: Principal): Promise<Array<Principal>>;
+    getFollowing(user: Principal): Promise<Array<Principal>>;
     getNotifications(): Promise<Array<Notification>>;
     getUserProfile(user: Principal): Promise<UserProfile | null>;
     getVideoPost(videoId: string): Promise<VideoPost | null>;
     isCallerAdmin(): Promise<boolean>;
     likeVideo(videoId: string): Promise<void>;
     saveCallerUserProfile(profile: UserProfile): Promise<void>;
+    searchUsers(searchText: string): Promise<Array<UserSearchResult>>;
+    startPhoneVerification(phoneNumber: string): Promise<string>;
+    unfollowUser(userToUnfollow: Principal): Promise<void>;
     updateNotificationStatus(notificationId: string, isRead: boolean): Promise<void>;
 }
